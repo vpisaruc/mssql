@@ -134,4 +134,4 @@ where idTransaction in
 	);
 
 
-
+-- group by без having
