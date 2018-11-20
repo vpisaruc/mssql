@@ -83,3 +83,55 @@ end as productPriceAnalyse
 from tbProduct;
 
 --создание новой временной локальной таблицы
+
+select productName,
+case 
+when productPrice < 1000
+	then 'Дешего' 
+	else 'Дорого'
+end as productPriceAnalyse
+into #tbAnalyser
+from tbProduct;
+
+--вложенные кореллированные подзапросы в качестве производных таблиц и предложении from
+
+with tmpCountSales as
+(
+select  p.id,
+        p.productName,
+		sum(1)            cnt
+   from tbOrder       o,
+        tbProduct     p
+   where p.id = o.idProduct
+   group by p.id, p.productName
+) 
+select tcs.*
+from tmpCountSales   tcs
+where tcs.cnt = (select max(cts1.cnt) from tmpCountSales cts1)
+order by tcs.cnt desc, tcs.productName;
+
+-- с 3 вложенностью
+
+select id, cardNumber 
+from tbBonusCard 
+where idTransaction in
+	(
+		select id
+		from tbTransaction
+		where "date" between '2000-01-01' and '2018-12-10' 
+		and idClient in
+		(
+			select id 
+			from tbClient
+			where clientName like '%а%' 
+			and exists 
+			(
+				select id
+				from tbClient
+				where clientEmail like '%@gmail%'
+			) 
+		)
+	);
+
+
+
