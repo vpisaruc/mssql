@@ -211,3 +211,61 @@ select tcs.*
 from tmpCountSales   tcs
 where tcs.cnt = (select max(cts1.cnt) from tmpCountSales cts1)
 order by tcs.cnt desc, tcs.productName;
+
+--23 Инструкция SELECT, использующая рекурсивное обобщенное табличное выражение
+with tmpChilds (id,idRef,productName,cost, amount) as 
+(
+select   id, 
+         cast(null as integer)    idRef,
+         productName,
+	     productPrice             cost,
+		 cast(1   as integer)     amount
+   from  tbProduct
+   where id between 6 and 10
+union all
+select   id, 
+         id + 5                   idRef,
+         productName,
+	     productPrice             cost,
+		 id                       amount
+   from  tbProduct
+   where id <= 5
+),
+tmpData(id, productName, cost, amount) as
+(
+select   id, productName, cost, amount
+   from  tmpChilds  
+   where idRef is null
+union all
+select   b.id,
+         b.productName,
+		 cast(a.amount * a.cost as integer)   cost,
+         b.amount
+   from  tmpData   a,
+         tmpChilds b
+   where a.id = b.idRef
+)
+select * from tmpData;
+
+
+
+
+--24 Оконные функции. Использование конструкций MIN/MAX/AVG OVER()
+select c."clientName",
+	   b.id,
+	   b.cardNumber,
+	   min(bonusCount) over(PARTITION by b.id, b.cardNumber) as minimalBonusCount,
+	   max(bonusCount) over(PARTITION by b.id, b.cardNumber) as maximalBonusCount
+from tbBonusCard b left outer join tbClient c on c.id = idClient;
+
+--25 Оконные фнкции для устранения дублей
+WITH tmp AS
+	(
+		SELECT *
+			,ROW_NUMBER() OVER(PARTITION BY idProduct ORDER BY idTransaction) AS rn
+		FROM tbOrder
+	)
+DELETE FROM tmp 
+WHERE rn > 1
+
+select * from tbOrder;
