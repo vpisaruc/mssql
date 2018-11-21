@@ -1,7 +1,6 @@
 USE supermarket 
 GO
 
-select * from tbClient; 
 
 delete from tbProduct;
 delete from tbClient;
