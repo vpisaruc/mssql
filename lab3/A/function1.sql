@@ -2,8 +2,8 @@ use supermarket;
 go
 
 -- Скалярная функция
-IF OBJECT_ID (N'dbo.averageValueForPeriod', N'FN') IS NOT NULL  
-    DROP FUNCTION averageValueForPeriod;  
+IF OBJECT_ID (N'dbo.profitForPeriod', N'FN') IS NOT NULL  
+    DROP FUNCTION profitForPeriod;  
 GO 
 CREATE FUNCTION dbo.profitForPeriod(@beginingDate date, @endDate date)
 RETURNS int
@@ -17,3 +17,7 @@ BEGIN
 			SET @ret = 0;
 	RETURN @ret;
 END;
+GO
+
+SELECT dbo.profitForPeriod('2006-05-02', '2016-05-02') AS profitForPeriod;
+GO
