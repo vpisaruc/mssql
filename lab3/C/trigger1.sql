@@ -14,4 +14,4 @@ BEGIN
 END;
 GO
 
-DELETE tbTransaction WHERE id = 1;
+DROP TRIGGER deleteOrderAfterTransation;
