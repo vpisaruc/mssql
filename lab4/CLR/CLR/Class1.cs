@@ -22,7 +22,6 @@ public partial class UserDefinedFunctions
     [SqlFunctionAttribute()]
     public static SqlInt32 ScalarFunc1(SqlDateTime beginingDate, SqlDateTime endDate)
     {
-        ArrayList resultCollection = new ArrayList();
         using (SqlConnection connection = new SqlConnection("context connection=true"))
         {
             connection.Open();
@@ -44,11 +43,13 @@ public partial class UserDefinedFunctions
 
                 using (SqlDataReader amountReader = selectPaymentAmount.ExecuteReader())
                 {
+                    SqlInt32 result = 0;
                     while (amountReader.Read())
                     {
-
+                        result += amountReader.GetSqlInt32(1);
 
                     }
+                    return result;
                 }
             }
         }
