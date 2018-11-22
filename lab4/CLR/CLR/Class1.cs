@@ -19,7 +19,7 @@ public class HelloWorldProc
 
 public partial class UserDefinedFunctions
 {
-    [SqlFunctionAttribute()]
+    [SqlFunctionAttribute(DataAccess = DataAccessKind.Read)]
     public static SqlInt32 ScalarFunc1(SqlDateTime beginingDate, SqlDateTime endDate)
     {
         using (SqlConnection connection = new SqlConnection("context connection=true"))
@@ -46,7 +46,7 @@ public partial class UserDefinedFunctions
                     SqlInt32 result = 0;
                     while (amountReader.Read())
                     {
-                        result += amountReader.GetSqlInt32(1);
+                        result += amountReader.GetSqlInt32(0);
 
                     }
                     return result;

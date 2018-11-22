@@ -21,8 +21,3 @@ GO
 
 SELECT dbo.profitForPeriod('2006-05-02', '2016-05-02') AS profitForPeriod;
 GO
-
-
-SELECT paymentAmount
-FROM tbTransaction
-WHERE "date" BETWEEN '2006-05-02' and '2016-05-02';
