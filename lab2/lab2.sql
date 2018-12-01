@@ -1,6 +1,9 @@
 use supermarket 
 go
 
+
+
+
 --1 Предикант сравнения
 select distinct *
 from tbProduct 
@@ -28,7 +31,7 @@ where idTransaction in
 	);
 
 --5 предикант exists с вложенным подзапросом
-select distinct *
+select count(*)
 from tbTransaction
 where "type" = 'Cash' and
 exists 
@@ -94,24 +97,20 @@ into #tbAnalyser
 from tbProduct;
 
 --12 вложенные кореллированные подзапросы в качестве производных таблиц и предложении from
+--переделать на  кореллированные подзапросы сделал
+select cardNumber 
+from tbBonusCard BC join
+	(
+		select top 1 id, avg(paymentAmount) as AV
+		from tbTransaction
+		group by id
+		order by av desc
+	)
+	as T on T.id = BC.idTransaction;
 
-with tmpCountSales as
-(
-select  p.id,
-        p.productName,
-		sum(1)            cnt
-   from tbOrder       o,
-        tbProduct     p
-   where p.id = o.idProduct
-   group by p.id, p.productName
-) 
-select tcs.*
-from tmpCountSales   tcs
-where tcs.cnt = (select max(cts1.cnt) from tmpCountSales cts1)
-order by tcs.cnt desc, tcs.productName;
 
 --13 с 3 вложенностью
-
+--добавить табицу исправил
 select id, cardNumber 
 from tbBonusCard 
 where idTransaction in
@@ -119,16 +118,15 @@ where idTransaction in
 		select id
 		from tbTransaction
 		where "date" between '2000-01-01' and '2018-12-10' 
-		and idClient in
+		and id in
 		(
-			select id 
-			from tbClient
-			where clientName like '%а%' 
-			and exists 
+			select idTransaction 
+			from tbOrder
+			where idProduct in 
 			(
 				select id
-				from tbClient
-				where clientEmail like '%@gmail%'
+				from tbProduct
+				where productPrice < 400 
 			) 
 		)
 	);
@@ -213,6 +211,7 @@ where tcs.cnt = (select max(cts1.cnt) from tmpCountSales cts1)
 order by tcs.cnt desc, tcs.productName;
 
 --23 Инструкция SELECT, использующая рекурсивное обобщенное табличное выражение
+--
 with tmpChilds (id,idRef,productName,cost, amount) as 
 (
 select   id, 
@@ -255,7 +254,7 @@ select c."clientName",
 	   b.id,
 	   b.cardNumber,
 	   min(bonusCount) over(PARTITION by b.id, b.cardNumber) as minimalBonusCount,
-	   max(bonusCount) over(PARTITION by b.id, b.cardNumber) as maximalBonusCount
+	   max(bonusCount) over(PARTITION by b.cardNumber) as maximalBonusCount
 from tbBonusCard b left outer join tbClient c on c.id = idClient;
 
 --25 Оконные фнкции для устранения дублей

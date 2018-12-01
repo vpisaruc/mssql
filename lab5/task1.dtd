@@ -1,0 +1,8 @@
+<!ELEMENT gmailUsers (C*)>
+
+<!ELEMENT C>
+
+<!ATTLIST C
+    id (#PCDATA) #REQUIRED
+    clientName (#PCDATA)
+>

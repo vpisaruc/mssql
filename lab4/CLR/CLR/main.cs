@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.Collections;
 using System.Text;
 
-public partial class UserDefinedFunctions
+public class UserDefinedFunctions
 {
     //Определяемую пользователем скалярную функцию CLR
     [SqlFunctionAttribute(DataAccess = DataAccessKind.Read)]
@@ -45,45 +45,54 @@ public partial class UserDefinedFunctions
     }
 
     //Пользовательскую агрегатную функцию CLR
-    [SqlFunctionAttribute(DataAccess = DataAccessKind.Read)]
-    public static SqlInt32 transactionCnt(SqlDateTime beginingDate, SqlDateTime endDate)
+    //ispraviti
+    [Serializable]
+    [Microsoft.SqlServer.Server.SqlUserDefinedAggregate(Format.UserDefined, MaxByteSize = 8000)]
+    public struct MoreThen : IBinarySerialize
     {
-        using (SqlConnection connection = new SqlConnection("context connection=true"))
+        private int count;
+
+        public void Init()
         {
-            connection.Open();
-            using (SqlCommand selectPaymentAmount = new SqlCommand(
-             "SELECT " +
-             "[paymentAmount]" +
-             "FROM [tbTransaction] " +
-             "WHERE \"date\" BETWEEN @beginingDate and @endDate;",
-             connection))
-            {
-                SqlParameter modifiedBeginingDate = selectPaymentAmount.Parameters.Add(
-                    "@beginingDate", SqlDbType.DateTime);
-
-                SqlParameter modifiedEndDate = selectPaymentAmount.Parameters.Add(
-                    "@endDate", SqlDbType.DateTime);
-
-                modifiedBeginingDate.Value = beginingDate;
-                modifiedEndDate.Value = endDate;
-
-                using (SqlDataReader amountReader = selectPaymentAmount.ExecuteReader())
-                {
-                    SqlInt32 result = 0;
-                    while (amountReader.Read())
-                    {
-                        result += 1;
-
-                    }
-                    return result;
-                }
-            }
+            count = 0;
         }
+
+        public void Accumulate(SqlInt32 Value, SqlInt32 Value2)
+        {
+            if (Value > Value2)
+                count++;
+        }
+
+        public void Merge(MoreThen Group)
+        {
+            count += Group.count;
+        }
+
+        public SqlInt32 Terminate()
+        {
+            return new SqlInt32(count);
+        }
+
+        #region IBinarySerialize Members
+
+        public void Read(System.IO.BinaryReader r)
+        {
+            count = r.ReadInt32();
+        }
+
+        public void Write(System.IO.BinaryWriter w)
+        {
+            w.Write(count);
+        }
+
+        #endregion
     }
 
     //Определяемую пользователем табличную функцию CLR
-    [SqlFunctionAttribute(DataAccess = DataAccessKind.Read)]
-    public static SqlInt32 calculateAverageBonusCount()
+    //+table
+    [Microsoft.SqlServer.Server.SqlFunction(FillRowMethodName = "FillRow",
+    TableDefinition = "intpart int")]
+    public static IEnumerable CalculateAverageBonusCount()
     {
         using (SqlConnection connection = new SqlConnection("context connection=true"))
         {
@@ -106,13 +115,31 @@ public partial class UserDefinedFunctions
                         totalBonus += amountReader.GetSqlInt32(0);
                     }
                     result = totalBonus / cnt;
-                    return result;
+                    yield return new AvgCnt(result);
                 }
             }
+        }
+
+    }
+
+    public static void FillRow(object row, out SqlInt32 word)
+    {
+        // Разбор строки на отдельные столбцы. 
+        word = ((AvgCnt)row).word;
+    }
+
+    public class AvgCnt
+    {
+        public SqlInt32 word;
+
+        public AvgCnt(SqlInt32 c)
+        {
+            word = c;
         }
     }
 
     // Хранимую процедуру CLR
+    //++
     [Microsoft.SqlServer.Server.SqlProcedure()]
     public static void procedureCLR(SqlInt32 CashBoxNumber)
     {
@@ -121,7 +148,7 @@ public partial class UserDefinedFunctions
             connection.Open();
 
             using (SqlCommand selectCashbox = new SqlCommand(
-                "SELECT * FROM Purchasing.Vendor " +
+                "SELECT * FROM tbTransaction " +
                 "WHERE cashboxNumber = @number", connection))
             {
                 SqlParameter modifycashBoxNumber = selectCashbox.Parameters.Add(
@@ -133,6 +160,7 @@ public partial class UserDefinedFunctions
     }
 
     //CLR тригер
+    //++
     [Microsoft.SqlServer.Server.SqlTrigger (Name="Trigger", Target="tbClient", Event="FOR DELETE")]
     public static void deleteMe()
     {
@@ -144,14 +172,15 @@ public partial class UserDefinedFunctions
 
 }
 
+//start sql
 //Определяемый пользователем тип данных CLR
 [Serializable]
 [Microsoft.SqlServer.Server.SqlUserDefinedType(Format.Native, IsByteOrdered = true)]
-public struct Point : INullable
+public struct Telephone : INullable
 {
     private bool is_Null;
-    private Int32 _x;
-    private Int32 _y;
+    private Int64 _countryCode;
+    private Int64 _telephoneNumber;
 
     public bool IsNull
     {
@@ -161,11 +190,11 @@ public struct Point : INullable
         }
     }
 
-    public static Point Null
+    public static Telephone Null
     {
         get
         {
-            Point pt = new Point();
+            Telephone pt = new Telephone();
             pt.is_Null = true;
             return pt;
         }
@@ -178,68 +207,63 @@ public struct Point : INullable
         else
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(_x);
-            builder.Append(", ");
-            builder.Append(_y);
+            builder.Append(_countryCode);
+            builder.Append("-");
+            builder.Append(_telephoneNumber);
             return builder.ToString();
         }
     }
 
     [SqlMethod(OnNullCall = false)]
-    public static Point Parse(SqlString s)
+    public static Telephone Parse(SqlString s)
     {
         if (s.IsNull)
             return Null;
 
-        Point pt = new Point();
-        string[] xy = s.Value.Split(",".ToCharArray());
-        pt.x = Int32.Parse(xy[0]);
-        pt.y = Int32.Parse(xy[1]);
+        Telephone pt = new Telephone();
+        string[] xy = s.Value.Split("-".ToCharArray());
+        pt._countryCode = Int64.Parse(xy[0]);
+        pt._telephoneNumber = Int64.Parse(xy[1]);
 
         return pt;
     }
 
-    public Int32 x
+    public Int64 countryCode
     {
         get
         {
-            return this._x;
+            return this._countryCode;
         }
 
         set
         {
-            _x = value;
+            _countryCode = value;
         }
     }
 
-    public Int32 y
+    public Int64 telephoneNumber
     {
         get
         {
-            return this._y;
+            return this._telephoneNumber;
         }
 
         set
         {
-            _y = value;
+            _telephoneNumber = value;
         }
     }
 
     [SqlMethod(OnNullCall = false)]
-    public Double Distance()
+    public void telephoneSize(Telephone pFrom)
     {
-        return DistanceFromXY(0, 0);
+        if (pFrom._countryCode != 7)
+        {
+            SqlContext.Pipe.Send("Это не русский номер");
+        }
     }
 
-    [SqlMethod(OnNullCall = false)]
-    public Double DistanceFrom(Point pFrom)
-    {
-        return DistanceFromXY(pFrom.x, pFrom.y);
-    }
-
-    [SqlMethod(OnNullCall = false)]
-    public Double DistanceFromXY(Int32 iX, Int32 iY)
-    {
-        return Math.Sqrt(Math.Pow(iX - _x, 2.0) + Math.Pow(iY - _y, 2.0));
-    }
 }
+
+
+

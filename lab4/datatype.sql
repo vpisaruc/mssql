@@ -13,8 +13,8 @@ RECONFIGURE
 GO
  
 
-IF EXISTS (SELECT name FROM sysobjects WHERE name = 'Point')  
-   DROP TYPE Point;  
+IF EXISTS (SELECT name FROM sysobjects WHERE name = 'Telephone')  
+   DROP TYPE Telephone;  
 GO  
 
 IF EXISTS (SELECT name FROM sys.assemblies WHERE name = 'MyClrCode')  
@@ -28,49 +28,35 @@ WITH PERMISSION_SET = SAFE -- EXTERNAL_ACCESS;
 GO   
 
 
-CREATE TYPE dbo.Point  
-EXTERNAL NAME MyClrCode.[Point];
+CREATE TYPE dbo.Telephone  
+EXTERNAL NAME MyClrCode.[Telephone];
 GO
 
 CREATE TABLE dbo.Test
 ( 
   id INT IDENTITY(1,1) NOT NULL, 
-  p Point NULL,
+  t Telephone NULL,
 );
 GO
 
 -- Testing inserts
 -- Correct values 
-INSERT INTO dbo.Test(p) VALUES('12,15'); 
-INSERT INTO dbo.Test(p) VALUES('1,0'); 
-INSERT INTO dbo.Test(p) VALUES('21,8');  
+INSERT INTO dbo.Test(t) VALUES('7-9690524677'); 
+INSERT INTO dbo.Test(t) VALUES('373-79018454'); 
+INSERT INTO dbo.Test(t) VALUES('1-8326752342');  
 GO 
--- An incorrect value 
-INSERT INTO dbo.Test(p) VALUES('a,2');
-GO
 
 -- Check the data - byte stream
 SELECT * FROM dbo.Test;
 
-SELECT id, p.ToString() AS Point 
+SELECT id, t.ToString() AS Telephone 
 FROM dbo.Test;
-
-DECLARE @p1 dbo.Point
-SET @p1 = CAST('7,5' AS dbo.Point)
-SELECT @p1.Distance() AS 'Distance'
-GO
- 
-DECLARE @p1 dbo.Point, @p2 dbo.Point
-SET @p1 = CAST('7,5' AS dbo.Point)
-SET @p2 = CAST('7,10' AS dbo.Point)
-SELECT @p1.DistanceFrom(@p2) AS 'Distance from point'
-GO
 
 DROP TABLE dbo.Test
 GO
 
-IF EXISTS (SELECT name FROM sysobjects WHERE name = 'Point')  
-   DROP TYPE Point;  
+IF EXISTS (SELECT name FROM sysobjects WHERE name = 'Telephone')  
+   DROP TYPE Telephone;  
 GO  
 
 IF EXISTS (SELECT name FROM sys.assemblies WHERE name = 'MyClrCode')  

@@ -1,3 +1,6 @@
+use supermarket
+go
+
 -- Подставляемая табличная функция
 IF OBJECT_ID (N'dbo.orderProductInStock', N'FN') IS NOT NULL
     DROP FUNCTION dbo.orderProductInStock

@@ -12,7 +12,7 @@ BEGIN
 	DECLARE @ret int;
 	SELECT @ret = SUM(paymentAmount)
 	FROM tbTransaction
-	WHERE "date" BETWEEN @beginingDate and @endDate;
+	WHERE [date] BETWEEN @beginingDate and @endDate;
 		IF (@ret IS NULL)
 			SET @ret = 0;
 	RETURN @ret;
