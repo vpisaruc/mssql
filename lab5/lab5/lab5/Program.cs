@@ -10,7 +10,7 @@ namespace ValidateCS
         {
             // Create a cache of schemas, and add two schemas
             XmlSchemaCollection sc = new XmlSchemaCollection();
-            sc.Add("urn:MyUri", "D:/university/database/mssql/lab5/task1XSDGENERATOR.xsd");
+            sc.Add("", "D:/university/database/mssql/lab5/task1XSDGENERATOR.xsd");
             //sc.Add("", "../../../doctors.xsd");
 
             // Create a validating reader object
@@ -30,7 +30,6 @@ namespace ValidateCS
             try
             {
                 int num = 0;
-                float avg_age = 0;
                 while (vr.Read())
                 {
 
@@ -45,7 +44,7 @@ namespace ValidateCS
 
                 }
 
-                Console.WriteLine("Number of Passengers: " + num + "\n");
+                Console.WriteLine("Number of Clients: " + num + "\n");
             }
             catch (XmlException ex)
             {
@@ -55,6 +54,7 @@ namespace ValidateCS
             {
                 vr.Close();
             }
+            Console.Read();
         }
 
         // Validation event handler method
@@ -62,5 +62,6 @@ namespace ValidateCS
         {
             Console.WriteLine("Validation Error: " + e.Message);
         }
+        
     }
 }
