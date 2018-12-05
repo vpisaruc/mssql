@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE gmailUsers[
+  <!ELEMENT gmailUsers (Client+)>
+  <!ELEMENT Client (clientName, clientTelephoneNumber, clientEmail)>
+  <!ATTLIST Client idClient ID #REQUIRED>
+  <!ELEMENT clientName (#PCDATA)>
+  <!ELEMENT clientTelephoneNumber (#PCDATA)>
+  <!ELEMENT clientEmail (#PCDATA)>
+]>
+
+<gmailUsers>
+<?refreshData daily?>
+<![CDATA[<?xml version="1.0"?>]]>
+
+<Client idClient="6">
+  <clientName>Амина Гуляева</clientName>
+  <clientTelephoneNumber>8-(909)-318-98-15</clientTelephoneNumber>
+  <clientEmail>amnesia1987@gmail.com</clientEmail>
+  <!-- мама -->
+</Client>
+<Client idClient="9">
+  <clientName>Земфира Авсеенко</clientName>
+  <clientTelephoneNumber>8-(909)-318-98-15</clientTelephoneNumber>
+  <clientEmail>calamite1943@gmail.com</clientEmail>
+  <!-- папа -->
+</Client>
+<Client idClient="18">
+  <clientName>Диана Евдокимова</clientName>
+  <clientTelephoneNumber>+7-(968)-682-45-97</clientTelephoneNumber>
+  <clientEmail>dehydration1868@gmail.com</clientEmail>
+  <!-- убил сына -->
+</Client>
+<Client idClient="23">
+  <clientName>Дина Панкова</clientName>
+  <clientTelephoneNumber>+7-(967)-890-59-11</clientTelephoneNumber>
+  <clientEmail>argument1822@gmail.com</clientEmail>
+  <!-- украл банку огурцов-->
+</Client>
+<Client idClient="24">
+  <clientName>Марианна Ахмадулина</clientName>
+  <clientTelephoneNumber>+7-(920)-735-42-62</clientTelephoneNumber>
+  <clientEmail>contemplative1830@gmail.com</clientEmail>
+  <!-- домогался до кассирши -->
+</Client>
+<Client idClient="25">
+  <clientName>Жанна Туманова</clientName>
+  <clientTelephoneNumber>+7-(966)-643-73-10</clientTelephoneNumber>
+  <clientEmail>antically1895@gmail.com</clientEmail>
+  <!-- в активном поиске -->
+</Client>
+<Client idClient="30">
+  <clientName>Варвара Панкова</clientName>
+  <clientTelephoneNumber>+7-(950)-394-12-59</clientTelephoneNumber>
+  <clientEmail>alans1951@gmail.com</clientEmail>
+  <!-- в активном поиске -->
+</Client>
+<Client idClient="42">
+  <clientName>Ростислав Кудрявцев</clientName>
+  <clientTelephoneNumber>+7-(907)-100-95-89</clientTelephoneNumber>
+  <clientEmail>astronautic2055@gmail.com</clientEmail>
+  <!-- любит оливки -->
+</Client>
+<Client idClient="43">
+  <clientName>Исак Аркадьев</clientName>
+  <clientTelephoneNumber>+7-(968)-761-50-63</clientTelephoneNumber>
+  <clientEmail>motility1855@gmail.com</clientEmail>
+  <!-- любит хлеб -->
+</Client>
+<Client idClient="48">
+  <clientName>Марица Голикова</clientName>
+  <clientTelephoneNumber>+7-(935)-931-87-46</clientTelephoneNumber>
+  <clientEmail>earth2025@gmail.com</clientEmail>
+  <!-- не пускать -->
+</Client>
+<Client idClient="62">
+  <clientName>Максим Архипов</clientName>
+  <clientTelephoneNumber>+7-(911)-534-45-85</clientTelephoneNumber>
+  <clientEmail>rhinoceros2059@gmail.com</clientEmail>
+  <!-- скрытый коп -->
+</Client>
+<Client idClient="70">
+  <clientName>Елизавета Климова</clientName>
+  <clientTelephoneNumber>+7-(977)-042-33-82</clientTelephoneNumber>
+  <clientEmail>frog1912@gmail.com</clientEmail>
+  <!-- мафия -->
+</Client>
+<Client idClient="93">
+  <clientName>Куприян Окулов</clientName>
+  <clientTelephoneNumber>+7-(943)-401-09-80</clientTelephoneNumber>
+  <clientEmail>ababa1990@gmail.com</clientEmail>
+  <!--дальше лень писать -->
+</Client>
+<Client idClient="96">
+  <clientName>Герман Авсеенко</clientName>
+  <clientTelephoneNumber>+7-(963)-032-85-94</clientTelephoneNumber>
+  <clientEmail>protesting2017@gmail.com</clientEmail>
+  <!--дальше лень писать -->
+</Client>
+<Client idClient="121">
+  <clientName>Ратмир Козин</clientName>
+  <clientTelephoneNumber>+7-(922)-845-46-57</clientTelephoneNumber>
+  <clientEmail>sylvan1855@gmail.com</clientEmail>
+  <!--дальше лень писать -->
+</Client>
+<Client idClient="130">
+  <clientName>Григорий Семенов</clientName>
+  <clientTelephoneNumber>+7-(973)-764-29-08</clientTelephoneNumber>
+  <clientEmail>antibiotic1983@gmail.com</clientEmail>
+  <!--дальше лень писать -->
+</Client>
+<Client idClient="144">
+  <clientName>Розалия Карпова</clientName>
+  <clientTelephoneNumber>+7-(963)-875-73-76</clientTelephoneNumber>
+  <clientEmail>constitutions1996@gmail.com</clientEmail>
+  <!--дальше лень писать -->
+</Client>
+<Client idClient="148">
+  <clientName>Тихон Авдеенко</clientName>
+  <clientTelephoneNumber>+7-(928)-131-53-83</clientTelephoneNumber>
+  <clientEmail>cablet1862@gmail.com</clientEmail>
+  <!--дальше лень писать -->
+</Client>
+<Client idClient="156">
+  <clientName>Тамара Сорокина</clientName>
+  <clientTelephoneNumber>+7-(939)-034-50-21</clientTelephoneNumber>
+  <clientEmail>ducking1997@gmail.com</clientEmail>
+  <!--дальше лень писать -->
+</Client>
+<Client idClient="158">
+  <clientName>Куприян Цветков</clientName>
+  <clientTelephoneNumber>+7-(963)-809-83-01</clientTelephoneNumber>
+  <clientEmail>convict1885@gmail.com</clientEmail>
+  <!--дальше лень писать -->
+</Client>
+<Client idClient="159">
+  <clientName>Иулиан Зайцев</clientName>
+  <clientTelephoneNumber>+7-(909)-214-91-20</clientTelephoneNumber>
+  <clientEmail>bahama1968@gmail.com</clientEmail>
+  <!--дальше лень писать -->
+</Client>
+<Client idClient="164">
+  <clientName>Мануэла Авдышева</clientName>
+  <clientTelephoneNumber>+7-(961)-575-43-20</clientTelephoneNumber>
+  <clientEmail>unspecific1832@gmail.com</clientEmail>
+  <!--дальше лень писать -->
+</Client>
+<Client idClient="170">
+  <clientName>Антонина Суворова</clientName>
+  <clientTelephoneNumber>+7-(905)-927-47-47</clientTelephoneNumber>
+  <clientEmail>chinook1906@gmail.com</clientEmail>
+  <!--дальше лень писать -->
+</Client>
+</gmailUsers>
