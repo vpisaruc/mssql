@@ -12,7 +12,7 @@ WHERE id = 26
 FOR XML RAW;  
 GO  
 
-SELECT DISTINCT C.id, C.clientName 
+SELECT DISTINCT C.id, C.clientName, C.clientTelephoneNumber, C.clientEmail
 FROM tbClient C JOIN tbBonusCard BC ON C.id = BC.idClient
 WHERE C.clientEmail LIKE '%@gmail%'
 FOR XML AUTO;
