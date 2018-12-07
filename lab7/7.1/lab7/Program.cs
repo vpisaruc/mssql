@@ -49,8 +49,8 @@ namespace lab7
             Transation[] tr;
 
 
-            cl = new Client[4];
-            tr = new Transation[4];
+            cl = new Client[5];
+            tr = new Transation[5];
 
             cl[0] = new Client(1, "Вася Петров", "+79690524788", "blabla@gmail.com");
             cl[1] = new Client(2, "Вера Кудря", "+79690524789", "blabla1@gmail.com");
@@ -64,23 +64,72 @@ namespace lab7
             tr[3] = new Transation(4, 1, "18/06/2009", "15:25:47", 800);
             tr[4] = new Transation(5, 5, "18/06/2010", "16:25:47", 900);
 
-            /*var custQuery = 
-                from cl */
-            
 
-            // Specify the data source. 
-            int[] scores = new int[] { 97, 92, 81, 60 };
+            // Простой запрос 
+            var custQuery =
+                from client in cl
+                select client;
 
-            // Define the query expression.
-            IEnumerable<int> scoreQuery =
-                from score in scores
-                where score > 80
-                select score;
-
-            // Execute the query. 
-            foreach (int i in scoreQuery)
+            foreach (Client cli in custQuery)
             {
-                Console.Write(i + " ");
+                Console.Write(cli.id + "---" + cli.name + "\n");
+            }
+
+            Console.Write("\n\n\n\n");
+
+            //Запрос с where
+            var custQuery1 =
+                from transact in tr
+                where transact.paymentAmount > 600
+                select transact;
+
+            foreach (Transation tran in custQuery1)
+            {
+                Console.Write(tran.id + "---" + tran.paymentAmount + "\n");
+            }
+
+            Console.Write("\n\n\n\n");
+
+            //запрос с группировкой
+            var custQuery2 =
+                from transact in tr
+                group transact by transact.date;
+
+            foreach (var tranGr in custQuery2)
+            {
+                Console.Write(tranGr.Key + "---");
+                foreach (Transation transact in tranGr)
+                {
+                    Console.Write(transact.id + "\n");
+                }
+            }
+
+            Console.Write("\n\n\n\n");
+
+            //запрос с джойном
+            var custQuery3 =
+                from transact in tr
+                join client in cl on transact.idClient equals client.id
+                select new { ClientName = client.name, TransactionID = transact.id};
+
+            foreach (var item in custQuery3)
+            {
+                Console.WriteLine( item.ClientName + "---" + item.TransactionID + "\n");
+            }
+
+            Console.Write("\n\n\n\n");
+
+
+            //запрос с let и where
+            var custQuery4 =
+                from client in cl
+                let words = client.name.Split(' ')
+                from word in words
+                select word;
+
+            foreach (var ct in custQuery4)
+            {
+                Console.Write(ct + "\n");
             }
 
             Console.Read();
