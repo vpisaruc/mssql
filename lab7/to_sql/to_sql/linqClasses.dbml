@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="supermarket" Class="linqClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=VICTORSPC;Initial Catalog=supermarket;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False" SettingsObjectName="to_sql.Properties.Settings" SettingsPropertyName="supermarketConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.tbTransaction" Member="tbTransaction">
+    <Type Name="tbTransaction">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="idClient" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="date" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="time" Type="System.TimeSpan" DbType="Time NOT NULL" CanBeNull="false" />
+      <Column Name="paymentAmount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="type" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="cashboxNumber" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="tbTransaction_tbBonusCard" Member="tbBonusCard" ThisKey="id" OtherKey="idTransaction" Type="tbBonusCard" />
+      <Association Name="tbTransaction_tbOrder" Member="tbOrder" ThisKey="id" OtherKey="idTransaction" Type="tbOrder" />
+      <Association Name="tbClient_tbTransaction" Member="tbClient" ThisKey="idClient" OtherKey="id" Type="tbClient" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbBonusCard" Member="tbBonusCard">
+    <Type Name="tbBonusCard">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="idTransaction" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idClient" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="cardNumber" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="issueDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="bonusCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="tbTransaction_tbBonusCard" Member="tbTransaction" ThisKey="idTransaction" OtherKey="id" Type="tbTransaction" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbClient" Member="tbClient">
+    <Type Name="tbClient">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="clientName" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="clientTelephoneNumber" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="clientEmail" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Association Name="tbClient_tbTransaction" Member="tbTransaction" ThisKey="id" OtherKey="idClient" Type="tbTransaction" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbOrder" Member="tbOrder">
+    <Type Name="tbOrder">
+      <Column Name="idTransaction" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idProduct" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="tbTransaction_tbOrder" Member="tbTransaction" ThisKey="idTransaction" OtherKey="id" Type="tbTransaction" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="tbProduct_tbOrder" Member="tbProduct" ThisKey="idProduct" OtherKey="id" Type="tbProduct" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbProduct" Member="tbProduct">
+    <Type Name="tbProduct">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="productName" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="productPrice" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="productInStock" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Association Name="tbProduct_tbOrder" Member="tbOrder" ThisKey="id" OtherKey="idProduct" Type="tbOrder" />
+    </Type>
+  </Table>
+</Database>

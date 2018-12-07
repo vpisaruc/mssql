@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="linqClasses">
+  <DataContextMoniker Name="/linqClassesDataContext" />
+  <nestedChildShapes>
+    <classShape Id="f60582eb-3dce-473a-8e4d-e9b02e819dbe" absoluteBounds="3.5, 1.875, 2, 2.1554996744791661">
+      <DataClassMoniker Name="/linqClassesDataContext/tbTransaction" />
+      <nestedChildShapes>
+        <elementListCompartment Id="793942db-2cde-4e94-9c10-c0a0d211a571" absoluteBounds="3.515, 2.335, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7df3cf75-21d2-48e4-8cc6-b34b134f2122" absoluteBounds="6.25, 3.875, 2, 1.9631982421875005">
+      <DataClassMoniker Name="/linqClassesDataContext/tbBonusCard" />
+      <nestedChildShapes>
+        <elementListCompartment Id="dcb51a22-51d1-4d2d-8371-9d58ad43263b" absoluteBounds="6.265, 4.335, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a6966921-f8cb-4755-af36-3819ad69cb9f" absoluteBounds="0.75, 2.125, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/linqClassesDataContext/tbClient" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1fab8d72-0638-41f9-bd5d-faa6ab780bc5" absoluteBounds="0.765, 2.585, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="4d4ca448-ed13-4f50-afca-9c2b0fe68514" absoluteBounds="6.25, 1.375, 2, 1.1939925130208335">
+      <DataClassMoniker Name="/linqClassesDataContext/tbOrder" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d1bbb953-89ed-4b8e-a308-e2507cd03858" absoluteBounds="6.265, 1.835, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d738adda-6aed-4372-9d25-7c8829741ce1" absoluteBounds="3.5, 5.125, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/linqClassesDataContext/tbProduct" />
+      <nestedChildShapes>
+        <elementListCompartment Id="08f76c2d-0741-472b-a3f6-6f8e73a135b4" absoluteBounds="3.515, 5.585, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(5.5 : 4.0289602129407); (5.875 : 4.4039602129407); (5.875 : 3.49849084750601); (6.00357443490112 : 3.62706528240713 : JumpStart); (6.12142556509888 : 3.74491641260489 : JumpEnd); (6.25150915249399 : 3.875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/linqClassesDataContext/tbTransaction/tbTransaction_tbBonusCard" />
+      <nodes>
+        <classShapeMoniker Id="f60582eb-3dce-473a-8e4d-e9b02e819dbe" />
+        <classShapeMoniker Id="7df3cf75-21d2-48e4-8cc6-b34b134f2122" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 2.91429768880208); (3.5 : 2.91429768880208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/linqClassesDataContext/tbClient/tbClient_tbTransaction" />
+      <nodes>
+        <classShapeMoniker Id="a6966921-f8cb-4755-af36-3819ad69cb9f" />
+        <classShapeMoniker Id="f60582eb-3dce-473a-8e4d-e9b02e819dbe" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 2.22199625651042); (5.97916666666667 : 2.22199625651042 : JumpStart); (6.14583333333333 : 2.22199625651042 : JumpEnd); (6.25 : 2.22199625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/linqClassesDataContext/tbTransaction/tbTransaction_tbOrder" />
+      <nodes>
+        <classShapeMoniker Id="f60582eb-3dce-473a-8e4d-e9b02e819dbe" />
+        <classShapeMoniker Id="4d4ca448-ed13-4f50-afca-9c2b0fe68514" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 5.18692851096755); (6.0625 : 4.62442851096755); (6.0625 : 1.76724612825521); (6.25 : 1.76724612825521)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+      <AssociationMoniker Name="/linqClassesDataContext/tbProduct/tbProduct_tbOrder" />
+      <nodes>
+        <classShapeMoniker Id="d738adda-6aed-4372-9d25-7c8829741ce1" />
+        <classShapeMoniker Id="4d4ca448-ed13-4f50-afca-9c2b0fe68514" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
