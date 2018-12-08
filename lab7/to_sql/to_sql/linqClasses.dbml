@@ -51,4 +51,10 @@
       <Association Name="tbProduct_tbOrder" Member="tbOrder" ThisKey="id" OtherKey="idProduct" Type="tbOrder" />
     </Type>
   </Table>
+  <Function Name="dbo.GetClient" Method="GetClient">
+    <ElementType Name="GetClientResult">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="clientName" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+    </ElementType>
+  </Function>
 </Database>

@@ -113,6 +113,13 @@ namespace to_sql
 				return this.GetTable<tbProduct>();
 			}
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetClient")]
+		public ISingleResult<GetClientResult> GetClient()
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())));
+			return ((ISingleResult<GetClientResult>)(result.ReturnValue));
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tbTransaction")]
@@ -950,6 +957,50 @@ namespace to_sql
 			if ((this.PropertyChanged != null))
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	public partial class GetClientResult
+	{
+		
+		private int _id;
+		
+		private string _clientName;
+		
+		public GetClientResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int NOT NULL")]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this._id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_clientName", DbType="NVarChar(200)")]
+		public string clientName
+		{
+			get
+			{
+				return this._clientName;
+			}
+			set
+			{
+				if ((this._clientName != value))
+				{
+					this._clientName = value;
+				}
 			}
 		}
 	}

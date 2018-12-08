@@ -39,21 +39,21 @@
         <classShapeMoniker Id="7df3cf75-21d2-48e4-8cc6-b34b134f2122" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 2.91429768880208); (3.5 : 2.91429768880208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 2.91429768880208); (3.5 : 2.91429768880208)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/linqClassesDataContext/tbClient/tbClient_tbTransaction" />
       <nodes>
         <classShapeMoniker Id="a6966921-f8cb-4755-af36-3819ad69cb9f" />
         <classShapeMoniker Id="f60582eb-3dce-473a-8e4d-e9b02e819dbe" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 2.22199625651042); (5.97916666666667 : 2.22199625651042 : JumpStart); (6.14583333333333 : 2.22199625651042 : JumpEnd); (6.25 : 2.22199625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.5 : 2.22199625651042); (5.97916666666667 : 2.22199625651042 : JumpStart); (6.14583333333333 : 2.22199625651042 : JumpEnd); (6.25 : 2.22199625651042)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/linqClassesDataContext/tbTransaction/tbTransaction_tbOrder" />
       <nodes>
         <classShapeMoniker Id="f60582eb-3dce-473a-8e4d-e9b02e819dbe" />
         <classShapeMoniker Id="4d4ca448-ed13-4f50-afca-9c2b0fe68514" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 5.18692851096755); (6.0625 : 4.62442851096755); (6.0625 : 1.76724612825521); (6.25 : 1.76724612825521)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.5 : 5.18692851096755); (6.0625 : 4.62442851096755); (6.0625 : 1.76724612825521); (6.25 : 1.76724612825521)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/linqClassesDataContext/tbProduct/tbProduct_tbOrder" />
       <nodes>
         <classShapeMoniker Id="d738adda-6aed-4372-9d25-7c8829741ce1" />
