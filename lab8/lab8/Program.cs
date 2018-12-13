@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +10,7 @@ namespace lab8
 {
     class Tasks
     {
-        private readonly string connectionString = @"server = ; database = TitanicDB; user id = sa; password = ";
+        private readonly string connectionString = @"Data Source = VICTORSPC; database = supermarket; Integrated Security = True; Connect Timeout = 30; Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
         static void Main(string[] args)
         {
@@ -16,14 +18,15 @@ namespace lab8
 
             solution.connectedObjects_task_1_ConnectionString();
             solution.connectedObjects_task_2_SimpleScalarSelection();
+            
             solution.connectedObjects_task_3_SqlCommand_SqlDataReader();
             solution.connectedObjects_task_4_SqlCommandWithParameters();
             solution.connectedObjects_task_5_SqlCommand_StoredProcedure();
-            solution.disconnectedObjects_task_6_DataSetFromTable();
+            solution.disconnectedObjects_task_6_DataSetFromTable();/*
             solution.disconnectedObjects_task_7_FilterSort();
             solution.disconnectedObjects_8_Insert();
             solution.disconnectedObjects_9_Delete();
-            solution.disconnectedObjects_10_Xml();
+            solution.disconnectedObjects_10_Xml();*/
         }
 
         public void connectedObjects_task_1_ConnectionString()
@@ -61,7 +64,7 @@ namespace lab8
             Console.WriteLine("".PadLeft(79, '-'));
             Console.WriteLine("Task #{0}: {1}", 2, "[Connected] Simple scalar query.");
 
-            string queryString = @"select count(*) from P";
+            string queryString = @"select count(*) from tbBonusCard";
             SqlConnection connection = new SqlConnection(connectionString);
 
             SqlCommand scalarQueryCommand = new SqlCommand(queryString, connection);
@@ -70,7 +73,7 @@ namespace lab8
             {
                 connection.Open();
                 Console.WriteLine("Connection has been opened.");
-                Console.WriteLine("-------->>> The count of Passengers is {0}", scalarQueryCommand.ExecuteScalar());
+                Console.WriteLine("-------->>> The count of BonusCards is {0}", scalarQueryCommand.ExecuteScalar());
             }
             catch (SqlException e)
             {
@@ -89,7 +92,7 @@ namespace lab8
             Console.WriteLine("".PadLeft(79, '-'));
             Console.WriteLine("Task #{0}: {1}", 3, "[Connected] DataReader for query.");
 
-            string queryString = @"select Passenger, TicketId, Class from T where Embarked = 'Q'";
+            string queryString = @"select id, date, paymentAmount, type, cashboxNumber from tbTransaction where id = 50";
             SqlConnection connection = new SqlConnection(connectionString);
 
             SqlCommand dataQueryCommand = new SqlCommand(queryString, connection);
@@ -100,10 +103,10 @@ namespace lab8
                 Console.WriteLine("Connection has been opened.");
                 SqlDataReader dataReader = dataQueryCommand.ExecuteReader();
 
-                Console.WriteLine("-------->>> Passenger from Qweenstown: ");
+                Console.WriteLine("-------->>> Transaction with 50 id: ");
                 while (dataReader.Read())
                 {
-                    Console.WriteLine("\t{0} {1}", dataReader.GetValue(0), dataReader.GetValue(1));
+                    Console.WriteLine("\t{0} {1} {2} {3} {4}", dataReader.GetValue(0), dataReader.GetValue(1), dataReader.GetValue(2), dataReader.GetValue(3), dataReader.GetValue(4));
                 }
                 Console.WriteLine("-------->>> <<<-------");
             }
@@ -124,9 +127,9 @@ namespace lab8
             Console.WriteLine("".PadLeft(79, '-'));
             Console.WriteLine("Task #{0}: {1}", 4, "[Connected] SqlCommand (Insert, Delete).");
 
-            string countQueryString = @"select count(*) from P go";
-            string insertQueryString = @"insert into P(Passenger, Sex, Age) values (@name, @sex, @age)";
-            string deleteQueryString = @"delete from P where Passenger = @name";
+            string countQueryString = @"select count(*) from tbClient go";
+            string insertQueryString = @"insert into tbClient(id, clientName, clientTelephoneNumber, clientEmail) values (@id, @name, @telephone, @email)";
+            string deleteQueryString = @"delete from tbClient where id = @id";
 
             SqlConnection connection = new SqlConnection(connectionString);
 
@@ -135,29 +138,34 @@ namespace lab8
             SqlCommand deleteQueryCommand = new SqlCommand(deleteQueryString, connection);
 
             //parameters
-            insertQueryCommand.Parameters.Add("@name", SqlDbType.VarChar, 85);
-            insertQueryCommand.Parameters.Add("@sex", SqlDbType.VarChar, 6);
-            insertQueryCommand.Parameters.Add("@age", SqlDbType.Int);
-            deleteQueryCommand.Parameters.Add("@name", SqlDbType.VarChar, 85);
+            insertQueryCommand.Parameters.Add("@id", SqlDbType.Int);
+            insertQueryCommand.Parameters.Add("@name", SqlDbType.VarChar, 200);
+            insertQueryCommand.Parameters.Add("@telephone", SqlDbType.VarChar, 200);
+            insertQueryCommand.Parameters.Add("@email", SqlDbType.VarChar, 200);
+            deleteQueryCommand.Parameters.Add("@id", SqlDbType.Int);
 
             Console.WriteLine("Sql commands: \n1) \"{0}\"\n\n2) \"{1}\"\n\n3) \"{2}\"\n\nhas been created.\n", countQueryString, insertQueryString, deleteQueryString);
             try
             {
                 connection.Open();
                 Console.WriteLine("Connection has been opened.\n");
-                Console.WriteLine("Current count of musicians: {0}\n", countQueryCommand.ExecuteScalar());
+                Console.WriteLine("Current count of clients: {0}\n", countQueryCommand.ExecuteScalar());
                 Console.WriteLine("Inserting a new musician. Input: ");
+                Console.Write("- id = ");
+                int id = Convert.ToInt32(Console.ReadLine());
                 Console.Write("- name = ");
                 string name = Console.ReadLine();
-                Console.Write("- sex = ");
-                string sex = Console.ReadLine();
-                Console.Write("- age = ");
-                int age = Convert.ToInt32(Console.ReadLine());
+                Console.Write("- telephone = ");
+                string telephone = Console.ReadLine();
+                Console.Write("- email = ");
+                string email = Console.ReadLine();
 
+
+                insertQueryCommand.Parameters["@id"].Value = id;
                 insertQueryCommand.Parameters["@name"].Value = name;
-                insertQueryCommand.Parameters["@sex"].Value = sex;
-                insertQueryCommand.Parameters["@age"].Value = age;
-                deleteQueryCommand.Parameters["@name"].Value = name;
+                insertQueryCommand.Parameters["@telephone"].Value = telephone;
+                insertQueryCommand.Parameters["@email"].Value = email;
+                deleteQueryCommand.Parameters["@id"].Value = id;
 
                 Console.WriteLine("\nInsert command: {0}", insertQueryCommand.CommandText);
                 insertQueryCommand.ExecuteNonQuery();
@@ -192,7 +200,7 @@ namespace lab8
 
             SqlCommand storedProcedureCommand = connection.CreateCommand();
             storedProcedureCommand.CommandType = CommandType.StoredProcedure;
-            storedProcedureCommand.CommandText = "CalculateFactorial1";
+            storedProcedureCommand.CommandText = "selectCashbox";
 
             Console.WriteLine("Sql command \"{0}\" has been created.", storedProcedureCommand.CommandText);
             try
@@ -200,17 +208,18 @@ namespace lab8
                 connection.Open();
                 Console.WriteLine("Connection has been opened.\n");
 
-                Console.Write("Factorial. Input the number: ");
-                int number = Convert.ToInt32(Console.ReadLine());
-                storedProcedureCommand.Parameters.Add("n", SqlDbType.Int).Value = number;
+                
 
-                var returnParameter = storedProcedureCommand.Parameters.Add("@ReturnVal", SqlDbType.Int);
+                var outputParamet = storedProcedureCommand.Parameters.Add("@transactionAmount", SqlDbType.Int);
+                outputParamet.Direction = ParameterDirection.Output;
+
+                var returnParameter = storedProcedureCommand.Parameters.Add("@retVal", SqlDbType.Int);
                 returnParameter.Direction = ParameterDirection.ReturnValue;
 
                 storedProcedureCommand.ExecuteNonQuery();
                 var result = returnParameter.Value;
 
-                Console.WriteLine("------>>> {0}! = {1}", number, result);
+                Console.WriteLine("------>>>Average transaction amount on 1st cashbox: {0}", result);
             }
             catch (SqlException e)
             {
@@ -229,7 +238,7 @@ namespace lab8
             Console.WriteLine("".PadLeft(79, '-'));
             Console.WriteLine("Task #{0}: {1}", 6, "[Disconnected] DataSet from the table.");
 
-            string query = @"select Passenger, PassengerId from PTS where Survival = 0";
+            string query = @"select id, transactionAmount from tbTransation where Survival = 0";
 
             SqlConnection connection = new SqlConnection(connectionString);
             try
