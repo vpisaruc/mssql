@@ -18,15 +18,14 @@ namespace lab8
 
             solution.connectedObjects_task_1_ConnectionString();
             solution.connectedObjects_task_2_SimpleScalarSelection();
-            
             solution.connectedObjects_task_3_SqlCommand_SqlDataReader();
             solution.connectedObjects_task_4_SqlCommandWithParameters();
             solution.connectedObjects_task_5_SqlCommand_StoredProcedure();
-            solution.disconnectedObjects_task_6_DataSetFromTable();/*
+            solution.disconnectedObjects_task_6_DataSetFromTable();
             solution.disconnectedObjects_task_7_FilterSort();
             solution.disconnectedObjects_8_Insert();
             solution.disconnectedObjects_9_Delete();
-            solution.disconnectedObjects_10_Xml();*/
+            solution.disconnectedObjects_10_Xml();
         }
 
         public void connectedObjects_task_1_ConnectionString()
@@ -238,7 +237,7 @@ namespace lab8
             Console.WriteLine("".PadLeft(79, '-'));
             Console.WriteLine("Task #{0}: {1}", 6, "[Disconnected] DataSet from the table.");
 
-            string query = @"select id, transactionAmount from tbTransation where Survival = 0";
+            string query = @"select id, paymentAmount from tbTransaction where paymentAmount < 4000";
 
             SqlConnection connection = new SqlConnection(connectionString);
             try
@@ -248,14 +247,14 @@ namespace lab8
 
                 SqlDataAdapter dataAdapter = new SqlDataAdapter(query, connection);
                 DataSet dataSet = new DataSet();
-                dataAdapter.Fill(dataSet, "NotSurv");
-                DataTable table = dataSet.Tables["NotSurv"];
+                dataAdapter.Fill(dataSet, "lowThen");
+                DataTable table = dataSet.Tables["lowThen"];
 
-                Console.WriteLine("Passengers who not survived:");
+                Console.WriteLine("Transactions with paymentAmount < 4000:");
                 foreach (DataRow row in table.Rows)
                 {
-                    Console.Write("{0} ", row["Passenger"]);
-                    Console.Write(" ---- {0}\n", row["Passengerid"]);
+                    Console.Write("{0} ", row["id"]);
+                    Console.Write(" ---- {0}\n", row["paymentAmount"]);
                 }
                 Console.WriteLine();
             }
@@ -276,7 +275,7 @@ namespace lab8
             Console.WriteLine("".PadLeft(79, '-'));
             Console.WriteLine("Task #{0}: {1}", 7, "[Disconnected] Filter and sort.");
 
-            string query = @"select * from PTS";
+            string query = @"select * from tbClient";
             SqlConnection connection = new SqlConnection(connectionString);
             try
             {
@@ -285,22 +284,22 @@ namespace lab8
 
                 SqlDataAdapter dataAdapter = new SqlDataAdapter(query, connection);
                 DataSet dataSet = new DataSet();
-                dataAdapter.Fill(dataSet, "PTS");
+                dataAdapter.Fill(dataSet, "tbClient");
                 DataTableCollection tables = dataSet.Tables;
 
-                Console.Write("Input part of name of Passenger: ");
+                Console.Write("Input part of name of Client: ");
                 string partOfName = Console.ReadLine();
                 Console.WriteLine();
 
-                string filter = "Passenger like '%" + partOfName + "%'";
-                string sort = "Passenger asc";
-                Console.WriteLine("Passenger who have name like \"" + partOfName + "\":");
-                foreach (DataRow row in tables["PTS"].Select(filter, sort))
+                string filter = "clientName like '%" + partOfName + "%'";
+                string sort = "clientName asc";
+                Console.WriteLine("Client who have name like \"" + partOfName + "\":");
+                foreach (DataRow row in tables["tbClient"].Select(filter, sort))
                 {
-                    Console.Write("{0} ", row["PassengerId"]);
-                    Console.Write("{0} ", row["Passenger"]);
-                    Console.Write("{0} ", row["TicketId"]);
-                    Console.Write("{0}\n", row["Survival"]);
+                    Console.Write("{0} ", row["id"]);
+                    Console.Write("{0} ", row["clientName"]);
+                    Console.Write("{0} ", row["clientTelephoneNumber"]);
+                    Console.Write("{0}\n", row["clientEmail"]);
                 }
                 Console.WriteLine();
             }
@@ -325,8 +324,8 @@ namespace lab8
             Console.WriteLine("".PadLeft(79, '-'));
             Console.WriteLine("Task #{0}: {1}", 8, "[Disconnected] Insert.");
 
-            string dataCommand = @"select * from P where Age > 50";
-            string insertQueryString = @"insert into P(Passenger, Sex, Age) values (@name, @sex, @age)";
+            string dataCommand = @"select * from tbClient";
+            string insertQueryString = @"insert into tbClient(id, clientName, clientTelephoneNumber, clientEmail) values (@id, @name, @telephone, @email)";
 
             SqlConnection connection = new SqlConnection(connectionString);
 
@@ -336,40 +335,45 @@ namespace lab8
                 Console.WriteLine("Connection has been opened.");
 
                 Console.WriteLine("Inserting a new Passenger. Input: ");
+                Console.Write("- id = ");
+                int id = Convert.ToInt32(Console.ReadLine());
                 Console.Write("- name = ");
                 string name = Console.ReadLine();
-                Console.Write("- sex = ");
-                string sex = Console.ReadLine();
-                Console.Write("- age = ");
-                int age = Convert.ToInt32(Console.ReadLine());
+                Console.Write("- telephone number = ");
+                string telephone = Console.ReadLine();
+                Console.Write("- email = ");
+                string email  = Console.ReadLine();
 
                 SqlDataAdapter dataAdapter = new SqlDataAdapter(new SqlCommand(dataCommand, connection));
                 DataSet dataSet = new DataSet();
-                dataAdapter.Fill(dataSet, "Passengers");
-                DataTable table = dataSet.Tables["Passengers"];
+                dataAdapter.Fill(dataSet, "Clients");
+                DataTable table = dataSet.Tables["Clients"];
 
                 DataRow insertingRow = table.NewRow();
-                insertingRow["Passenger"] = name;
-                insertingRow["Sex"] = sex;
-                insertingRow["age"] = age;
+                insertingRow["id"] = id;
+                insertingRow["clientName"] = name;
+                insertingRow["clientTelephoneNumber"] = telephone;
+                insertingRow["clientEmail"] = email;
 
                 table.Rows.Add(insertingRow);
 
-                Console.WriteLine("Passengers");
+                Console.WriteLine("Clients");
                 foreach (DataRow row in table.Rows)
                 {
-                    Console.Write("{0} ", row["Passenger"]);
-                    Console.Write("{0} ", row["Age"]);
-                    Console.Write("---- {0}\n", row["Sex"]);
+                    Console.Write("{0} ", row["id"]);
+                    Console.Write("{0} ", row["clientName"]);
+                    Console.Write("{0} ", row["clientTelephoneNumber"]);
+                    Console.Write("{0}\n", row["clientEmail"]);
                 }
 
                 SqlCommand insertQueryCommand = new SqlCommand(insertQueryString, connection);
-                insertQueryCommand.Parameters.Add("@name", SqlDbType.VarChar, 85, "Passenger");
-                insertQueryCommand.Parameters.Add("@sex", SqlDbType.VarChar, 20, "Sex");
-                insertQueryCommand.Parameters.Add("@age", SqlDbType.Int, 4, "Age");
+                insertQueryCommand.Parameters.Add("@id", SqlDbType.Int, 5 ,"id");
+                insertQueryCommand.Parameters.Add("@name", SqlDbType.VarChar, 200, "clientName");
+                insertQueryCommand.Parameters.Add("@telephone", SqlDbType.VarChar, 200, "clientTelephoneNumber");
+                insertQueryCommand.Parameters.Add("@email", SqlDbType.VarChar, 200, "clientEmail");
 
                 dataAdapter.InsertCommand = insertQueryCommand;
-                dataAdapter.Update(dataSet, "Passengers");
+                dataAdapter.Update(dataSet, "Clients");
             }
             catch (SqlException e)
             {
@@ -392,8 +396,8 @@ namespace lab8
             Console.WriteLine("".PadLeft(79, '-'));
             Console.WriteLine("Task #{0}: {1}", 9, "[Disconnected] Delete.");
 
-            string dataCommand = @"select * from P where Age > 50";
-            string deleteQueryString = @"delete from P where Passenger = @name";
+            string dataCommand = @"select * from tbClient";
+            string deleteQueryString = @"delete from tbClient where id = @id";
 
             SqlConnection connection = new SqlConnection(connectionString);
 
@@ -401,32 +405,33 @@ namespace lab8
             {
                 connection.Open();
                 Console.WriteLine("Deleting the passenger. Input: ");
-                Console.Write("- name = ");
-                string name = Console.ReadLine();
+                Console.Write("- id = ");
+                int id = Convert.ToInt32(Console.ReadLine());
 
                 SqlDataAdapter dataAdapter = new SqlDataAdapter(new SqlCommand(dataCommand, connection));
                 DataSet dataSet = new DataSet();
-                dataAdapter.Fill(dataSet, "Passengers");
-                DataTable table = dataSet.Tables["Passengers"];
+                dataAdapter.Fill(dataSet, "Clients");
+                DataTable table = dataSet.Tables["Clients"];
 
-                string filter = "Passenger = '" + name + "'";
+                string filter = "id = '" + id + "'";
                 foreach (DataRow row in table.Select(filter))
                 {
                     row.Delete();
                 }
 
                 SqlCommand deleteQueryCommand = new SqlCommand(deleteQueryString, connection);
-                deleteQueryCommand.Parameters.Add("@name", SqlDbType.VarChar, 85, "Passenger");
+                deleteQueryCommand.Parameters.Add("@id", SqlDbType.Int, 5, "id");
 
                 dataAdapter.DeleteCommand = deleteQueryCommand;
-                dataAdapter.Update(dataSet, "Passengers");
+                dataAdapter.Update(dataSet, "Clients");
 
-                Console.WriteLine("Passengers");
+                Console.WriteLine("Clients");
                 foreach (DataRow row in table.Rows)
                 {
-                    Console.Write("{0} ", row["Passenger"]);
-                    Console.Write("{0} ", row["Age"]);
-                    Console.Write("---- {0}\n", row["Sex"]);
+                    Console.Write("{0} ", row["id"]);
+                    Console.Write("{0} ", row["clientName"]);
+                    Console.Write("{0} ", row["clientTelephoneNumber"]);
+                    Console.Write("{0}\n", row["clientEmail"]);
                 }
             }
             catch (SqlException e)
@@ -450,7 +455,7 @@ namespace lab8
             Console.WriteLine("".PadLeft(80, '-'));
             Console.WriteLine("Task #{0}: {1}", 10, "WriteXml.");
 
-            string query = @"select * from PTS";
+            string query = @"select * from tbClient";
 
             SqlConnection connection = new SqlConnection(connectionString);
             try
@@ -460,10 +465,10 @@ namespace lab8
 
                 SqlDataAdapter dataAdapter = new SqlDataAdapter(query, connection);
                 DataSet dataSet = new DataSet();
-                dataAdapter.Fill(dataSet, "PTS");
-                DataTable table = dataSet.Tables["PTS"];
+                dataAdapter.Fill(dataSet, "tbClient");
+                DataTable table = dataSet.Tables["tbClient"];
 
-                dataSet.WriteXml("PTS.xml");
+                dataSet.WriteXml("tbClient.xml");
                 Console.WriteLine("Check the PTS.xml file.");
             }
             catch (SqlException e)
